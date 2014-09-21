@@ -13,6 +13,10 @@ $RECYCLE.BIN/
 *.msi
 *.msm
 *.msp
+.m2
+.idea
+.git
+out
 
 # =========================
 # Operating System Files

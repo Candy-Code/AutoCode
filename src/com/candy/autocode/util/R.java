@@ -17,10 +17,10 @@ public class R {
         public static final String system_prop = ".*\\$\\$\\{([^}]+)\\}.*";
         public static final String user_prop = ".*\\$\\{([^}]+)\\}.*";
         public static String getSysPropRegex(String key){
-            return ".*\\$\\$\\{"+key+"\\}.*";
+            return "\\$\\$\\{"+key+"\\}";
         }
         public static String getUserPropRegex(String key){
-            return ".*\\$\\{"+key+"\\}.*";
+            return "\\$\\{"+key+"\\}";
         }
     }
 }

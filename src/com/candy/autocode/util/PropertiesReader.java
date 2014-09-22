@@ -1,7 +1,6 @@
 package com.candy.autocode.util;
 
 import java.io.InputStream;
-import java.util.Properties;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -36,9 +35,9 @@ public class PropertiesReader {
                     value = (String)user_properties.get(key);
                     if(StringUtils.isNotBlank(value)){
                         if(value.matches(R.regex.system_prop)){
-                           value = replaceSysProp(value,sys_properties);
+                           value = replaceSysProp(value);
                         }else if(value.matches(R.regex.user_prop)){
-                            value = replaceUserProp(value,user_properties);
+                            value = replaceUserProp(value);
                         }
                     }
                     user_properties.setProperty(key, value);
@@ -52,7 +51,7 @@ public class PropertiesReader {
     }
 
 
-    private static String replaceUserProp(String value,Properties properties) {
+    private static String replaceUserProp(String value) {
         String key = null;
         while(StringUtils.isNotBlank(key = RegexUtil.getContent(value,R.regex.user_prop,1))){
             if(StringUtils.isNotBlank(key)){
@@ -66,13 +65,16 @@ public class PropertiesReader {
     }
     public static void main(String[] args) {
 //        Properties properties = new Properties();
-//        properties.setProperty("name","jack");
-//        System.out.println(replaceSysProp("user$${name}fdjskfdj${name}",properties));
-        System.out.println("user$${name}fdjskfdj${name}".replaceAll("\\$\\$\\{name\\}","jack"));
+        sys_properties.setProperty("name","jack");
+
+        System.out.println(replaceSysProp("user$${name}fdjskfdj${name}"));
+//        System.out.println("user$${name}fdjskfdj${name}".replaceAll("\\$\\$\\{name\\}","jack"));
+//        System.out.println("user$${name}fdjskfdj${name}".matches(".*\\$\\$\\{name\\}.*"));
     }
 
-    private static String replaceSysProp(String value,Properties properties) {
+    private static String replaceSysProp(String value) {
         String key = null;
+        这里替换有问题
         while(StringUtils.isNotBlank(key = RegexUtil.getContent(value,R.regex.system_prop,1))){
             if(StringUtils.isNotBlank(key)){
                 if(sys_properties.contains(key)){
@@ -80,6 +82,7 @@ public class PropertiesReader {
                 }
             }
         }
+
         return value;
     }
 

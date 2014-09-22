@@ -1,12 +1,12 @@
 package com.candy.autocode;
 
 import com.candy.autocode.argument.Args;
+import com.candy.autocode.argument.ArgsParser;
 import com.candy.autocode.config.AutoCodeConfig;
 import com.candy.autocode.util.StringUtils;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
-import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -29,63 +29,19 @@ public class AutoCode {
 
         if("-a".equalsIgnoreCase(args.getOptions())){
             createAll(config);
-        }else if("-dao".equalsIgnoreCase(args.getOptions())){
-            createDao(config);
-        }else if("-daoi".equalsIgnoreCase(args.getOptions())){
-            createDaoImpl(config);
-        }else if("-bean".equalsIgnoreCase(args.getOptions())){
-            createBean(config);
-        }else if("-s".equalsIgnoreCase(args.getOptions())){
-            createService(config);
-        }else if("-si".equalsIgnoreCase(args.getOptions())){
-            createServiceImpl(config);
-        }else if("-c".equalsIgnoreCase(args.getOptions())){
-            createController(config);
+        }else if(ArgsParser.options.contains(args.getOptions())){
+            createComponent(args.getOptions().substring(1),config);
         }
     }
-
-    private void createServiceImpl(AutoCodeConfig config) throws IOException {
+    private void createComponent(String componentName,AutoCodeConfig config) throws IOException{
         Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getServiceImpl().getSavePath(),
+        coder.create(config.getProps(),config.getComponent(componentName).getSavePath(),
                 config.getServiceImpl().getClassName(),config.getServiceImpl().getTemplate());
     }
 
-    private void createController(AutoCodeConfig config) throws IOException{
-        Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getController().getSavePath(),
-                config.getController().getClassName(),config.getController().getTemplate());
-    }
-
-    private void createService(AutoCodeConfig config) throws IOException{
-        Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getController().getSavePath(),
-                config.getController().getClassName(),config.getController().getTemplate());
-    }
-
-    private void createBean(AutoCodeConfig config) throws IOException{
-        Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getBean().getSavePath(),
-                config.getBean().getClassName(),config.getBean().getTemplate());
-    }
-
-    private void createDaoImpl(AutoCodeConfig config) throws IOException{
-        Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getDaoImpl().getSavePath(),
-                config.getDaoImpl().getClassName(),config.getDaoImpl().getTemplate());
-    }
-
-    private void createDao(AutoCodeConfig config) throws IOException{
-        Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getDao().getSavePath(),
-                config.getDao().getClassName(),config.getDao().getTemplate());
-    }
-
     private void createAll(AutoCodeConfig config) throws IOException {
-        createBean(config);
-        createDao(config);
-        createDaoImpl(config);
-        createService(config);
-        createServiceImpl(config);
-        createController(config);
+        for(String componentName : ArgsParser.options){
+            createComponent(componentName.substring(1),config);
+        }
     }
 }

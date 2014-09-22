@@ -16,7 +16,7 @@ $RECYCLE.BIN/
 .m2
 .idea
 .git
-target
+target/*
 out
 
 # =========================

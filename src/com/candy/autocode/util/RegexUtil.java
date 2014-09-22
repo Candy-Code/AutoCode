@@ -1,5 +1,6 @@
 package com.candy.autocode.util;
 
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,5 +17,11 @@ public class RegexUtil {
             return matcher.group(group);
         }
         return null;
+    }
+
+    public static void main(String[] args) {
+        Properties properties = new Properties();
+        properties.setProperty("name","jack");
+        System.out.println(getContent("user$${name}fdjskfdj${name}",".*\\$\\$\\{([^}]+)\\}.*",1));
     }
 }

@@ -3,8 +3,6 @@ package com.candy.autocode.config;
 import com.candy.autocode.util.PropertiesReader;
 import com.candy.autocode.util.R;
 
-import java.util.Locale;
-
 /**
  * Created by yantingjun on 2014/9/21.
  */
@@ -33,7 +31,8 @@ public class Config {
         loadConfig();
     }
     private static void loadConfig(){
-        PropertiesReader propertiesReader = PropertiesReader.loadProperties(R.Constants.default_system_file_name);
+        PropertiesReader propertiesReader = PropertiesReader.getInstance();
+        propertiesReader.loadProperties(R.Constants.default_system_file_name);
         encoding = propertiesReader.getValue("encoding",R.Constants.DEFAULT_ENCODING);
         locale = propertiesReader.getValue("locale",R.Constants.DEFAULT_LOCALE);
     }

@@ -4,7 +4,6 @@ import com.candy.autocode.util.FileUtils;
 import com.candy.autocode.util.JavaClassNameParser;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,8 +27,8 @@ public class ArgsParser {
             .append("   -a      创建以上全部（默认） \n")
             .append("configFileName 配置文件，默认为当前目录下的auto_code.properties\n")
             .toString();
-    public  List<String> commands = Arrays.asList("create");
-    public List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
+    public static List<String> commands = Arrays.asList("create");
+    public static List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
 
     public Args parse(String [] arguments) throws InvalidParameterException{
         Args args = new Args();
@@ -61,7 +60,7 @@ public class ArgsParser {
     }
     private Args parseOptions(String option,Args args){
         if(options.contains(option.toLowerCase())){
-            args.setOptions(option);
+            args.setOptions(option.toLowerCase());
         }else{
             throw new InvalidParameterException("invalid options!");
         }

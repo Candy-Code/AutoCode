@@ -8,7 +8,6 @@ import com.candy.autocode.util.StringUtils;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -50,8 +49,8 @@ public class AutoCodeConfig {
      */
     public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException {
         AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
-        PropertiesReader propertiesReader = PropertiesReader.loadProperties(configFileName);
-        ResourceBundle
+        PropertiesReader propertiesReader = PropertiesReader.getInstance();
+        propertiesReader.loadProperties(configFileName);
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue("template.basedir")))){
             throw new InvalidPropertiesFormatException("template.dir is required!");
         }
@@ -71,10 +70,10 @@ public class AutoCodeConfig {
     }
 
     private static void loadComponent(String componentName,AutoCodeConfig autoCodeConfig,PropertiesReader propertiesReader) throws InvalidPropertiesFormatException {
-        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+"savePath")))){
+        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")))){
             throw new InvalidPropertiesFormatException(componentName+".savePath is required!");
         }
-        autoCodeConfig.getComponent(componentName).setSavePath(String.valueOf(propertiesReader.getValue(componentName+".savePath")));
+        autoCodeConfig.getComponent(componentName).setSavePath(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")));
 
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")))){
             throw new InvalidPropertiesFormatException(componentName+".className is required!");
@@ -84,7 +83,7 @@ public class AutoCodeConfig {
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")))){
             autoCodeConfig.getComponent(componentName).setTemplate(autoCodeConfig.getTargetName()+ R.template.suffix);
         }else{
-            autoCodeConfig.getComponent(componentName).setTemplate(String.valueOf(propertiesReader.getValue(componentName+".template")));
+            autoCodeConfig.getComponent(componentName).setTemplate(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")));
         }
     }
 

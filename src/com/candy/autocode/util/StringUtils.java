@@ -10,4 +10,7 @@ public class StringUtils {
     public static boolean isNotBlank(String str){
         return !isBlank(str);
     }
+    public static String valueOf(Object value){
+        return value==null?"":value.toString();
+    }
 }

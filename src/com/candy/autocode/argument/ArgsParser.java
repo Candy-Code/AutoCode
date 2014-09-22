@@ -28,8 +28,8 @@ public class ArgsParser {
             .append("   -a      创建以上全部（默认） \n")
             .append("configFileName 配置文件，默认为当前目录下的auto_code.properties\n")
             .toString();
-    private List<String> commands = Arrays.asList("create");
-    private List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
+    public  List<String> commands = Arrays.asList("create");
+    public List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
 
     public Args parse(String [] arguments) throws InvalidParameterException{
         Args args = new Args();

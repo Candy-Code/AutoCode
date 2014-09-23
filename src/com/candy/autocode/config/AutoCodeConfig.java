@@ -35,7 +35,9 @@ public class AutoCodeConfig {
             AutoCodeConfig config = AutoCodeConfig.loadConfig("test","auto_code.properties");
             System.out.println(config.getController().getClassName());
             System.out.println(config.getBean().getClassName());
+            System.out.println(config.getBean().getSavePath());
             System.out.println(config.getDao().getClassName());
+            System.out.println(config.getController().getSavePath());
         } catch (InvalidPropertiesFormatException e) {
             e.printStackTrace();
         }
@@ -50,16 +52,19 @@ public class AutoCodeConfig {
     public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException {
         AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
         PropertiesReader propertiesReader = PropertiesReader.getInstance();
+        if(StringUtils.isNotBlank(targetName)){
+            autoCodeConfig.setTargetName(targetName);
+            propertiesReader.setSystemValue("args.targetName",targetName);
+        }
+
         propertiesReader.loadProperties(configFileName);
+
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue("template.basedir")))){
             throw new InvalidPropertiesFormatException("template.dir is required!");
         }
         autoCodeConfig.setTemplateBaseDir(StringUtils.valueOf(propertiesReader.getValue("template.basedir")));
 
-        if(StringUtils.isNotBlank(targetName)){
-            autoCodeConfig.setTargetName(targetName);
-            propertiesReader.setSystemValue("args.targetName",targetName);
-        }
+
         loadComponent("bean",autoCodeConfig,propertiesReader);
         loadComponent("controller",autoCodeConfig,propertiesReader);
         loadComponent("dao",autoCodeConfig,propertiesReader);

@@ -2,7 +2,6 @@ package com.candy.autocode;
 
 import com.candy.autocode.argument.Args;
 import com.candy.autocode.argument.ArgsParser;
-import com.sun.org.apache.xpath.internal.SourceTree;
 
 import java.security.InvalidParameterException;
 
@@ -22,6 +21,7 @@ public class Main {
             print(e.getMessage()+"\n"+ArgsParser.help);
         }
         catch(Exception e){
+            e.printStackTrace();
             print(e.getMessage());
         }
     }

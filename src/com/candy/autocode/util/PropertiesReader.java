@@ -1,6 +1,7 @@
 package com.candy.autocode.util;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,18 +52,19 @@ public class PropertiesReader {
         return propertiesReader;
     }
     public Map toMap(){
-        String value = "";
         Map<String,Object> map = new HashMap<String,Object>();
+        for(String key : sys_properties.stringPropertyNames()){
+            map.put(key,sys_properties.getProperty(key));
+        }
         for(String key : user_properties.stringPropertyNames()){
-            value = user_properties.getProperty(key);
+            String value = user_properties.getProperty(key);
             if(value.startsWith("[")&&value.endsWith("]")){
-                
+                map.put(key, Arrays.asList(value.substring(0,value.length()-1).substring(1).split(",")));
+            }else{
+                map.put(key,value);
             }
-            map.put(key,)
         }
-        for(String key : user_properties.stringPropertyNames()){
-
-        }
+        return map;
     }
     public <T> T getValue(String key){
         return (T)user_properties.get(key);

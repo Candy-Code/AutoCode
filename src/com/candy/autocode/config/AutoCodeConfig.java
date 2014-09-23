@@ -71,6 +71,8 @@ public class AutoCodeConfig {
         loadComponent("daoImpl",autoCodeConfig,propertiesReader);
         loadComponent("service",autoCodeConfig,propertiesReader);
         loadComponent("serviceImpl",autoCodeConfig,propertiesReader);
+
+        autoCodeConfig.setProps(propertiesReader.toMap());
         return autoCodeConfig;
     }
 

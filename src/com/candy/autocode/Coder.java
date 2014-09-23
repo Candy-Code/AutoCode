@@ -44,17 +44,23 @@ public class Coder {
         Template template = cfg.getTemplate(templateName);
         JavaClassNameParser parser = new JavaClassNameParser(className);
 
-        String realFileName = savePath + parser.getPackagePath() + parser.getJavaFileName();
+        String realFileName = savePath + File.separator+parser.getPackagePath() + parser.getJavaFileName();
 
         File file = new File(realFileName);
         if (!file.getParentFile().exists()) {
-            file.mkdirs();
+            file.getParentFile().mkdirs();
         }
         PrintWriter out = null;
         try {
+            Map bean2 = new HashMap();
+            bean2.put("className","MyAppImpl");
+            bean2.put("packageName","com.test.candy");
+            bean2.put("author","yantingjun");
+            data.put("bean",bean2);
+//            template.dump(System.out);
+
             out = new PrintWriter(realFileName);
             template.process(data, out);
-            template.dump(System.out);
         } catch (Exception e) {
             e.printStackTrace();
         }finally {

@@ -36,7 +36,8 @@ public class AutoCode {
     private void createComponent(String componentName,AutoCodeConfig config) throws IOException{
         Coder coder = new Coder(config.getTemplateBaseDir());
         coder.create(config.getProps(),config.getComponent(componentName).getSavePath(),
-                config.getServiceImpl().getClassName(),config.getServiceImpl().getTemplate());
+                config.getComponent(componentName).getClassName(),
+                config.getComponent(componentName).getTemplate());
     }
 
     private void createAll(AutoCodeConfig config) throws IOException {

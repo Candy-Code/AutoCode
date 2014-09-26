@@ -1,6 +1,6 @@
 package com.candy.autocode.config;
 
-import com.candy.autocode.util.PropertiesReader;
+import com.candy.autocode.properties.PropertiesReader;
 import com.candy.autocode.util.R;
 
 /**

@@ -1,4 +1,4 @@
-package com.candy.autocode.util;
+package com.candy.autocode.properties;
 
 import java.util.*;
 

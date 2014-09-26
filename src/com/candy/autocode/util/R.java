@@ -8,6 +8,7 @@ public class R {
         public static final String DEFAULT_ENCODING = "utf-8";
         public static final String DEFAULT_LOCALE = "ZH_CN";
         public static final String default_system_file_name = "config.properties";
+        public static final String default_prop_type = "string";
     }
 
     public static class template{

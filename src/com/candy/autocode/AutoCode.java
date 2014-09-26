@@ -34,10 +34,12 @@ public class AutoCode {
         }
     }
     private void createComponent(String componentName,AutoCodeConfig config) throws IOException{
+        AutoCodeConfig.Component component = config.getComponent(componentName);
+        if(component == null ){
+            return ;
+        }
         Coder coder = new Coder(config.getTemplateBaseDir());
-        coder.create(config.getProps(),config.getComponent(componentName).getSavePath(),
-                config.getComponent(componentName).getClassName(),
-                config.getComponent(componentName).getTemplate());
+        coder.create(config.getProps(),component.getSavePath(),component.getPackageClassName(),component.getTemplate());
     }
 
     private void createAll(AutoCodeConfig config) throws IOException {

@@ -1,10 +1,12 @@
 package com.candy.autocode.config;
 
 import com.candy.autocode.argument.Args;
-import com.candy.autocode.util.PropertiesReader;
+import com.candy.autocode.exception.NoComponentException;
+import com.candy.autocode.properties.PropertiesReader;
 import com.candy.autocode.util.R;
 import com.candy.autocode.util.StringUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
@@ -77,6 +79,11 @@ public class AutoCodeConfig {
     }
 
     private static void loadComponent(String componentName,AutoCodeConfig autoCodeConfig,PropertiesReader propertiesReader) throws InvalidPropertiesFormatException {
+        AutoCodeConfig.Component component = autoCodeConfig.getComponent(componentName);
+        if(component == null){
+            throw new NoComponentException(String.format("Component %s not found!",componentName));
+        }
+
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")))){
             throw new InvalidPropertiesFormatException(componentName+".savePath is required!");
         }
@@ -85,7 +92,8 @@ public class AutoCodeConfig {
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")))){
             throw new InvalidPropertiesFormatException(componentName+".className is required!");
         }
-        autoCodeConfig.getComponent(componentName).setClassName(String.valueOf(propertiesReader.getValue(componentName+".className")));
+        autoCodeConfig.getComponent(componentName).setPackageName(StringUtils.valueOf(propertiesReader.getValue(componentName+".packageName")));
+        autoCodeConfig.getComponent(componentName).setClassName(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")));
 
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")))){
             autoCodeConfig.getComponent(componentName).setTemplate(autoCodeConfig.getTargetName()+ R.template.suffix);
@@ -100,7 +108,9 @@ public class AutoCodeConfig {
     public class Component{
         private String template;
         private String className;
+        private String packageName;
         private String savePath;
+        private String packageClassName;
 
         public String getTemplate() {
             return template;
@@ -122,8 +132,24 @@ public class AutoCodeConfig {
             return savePath;
         }
 
+        public String getPackageName() {
+            return packageName;
+        }
+
+        public void setPackageName(String packageName) {
+            this.packageName = packageName;
+        }
+
         public void setSavePath(String savePath) {
             this.savePath = savePath;
+        }
+
+        public String getPackageClassName() {
+            return packageClassName;
+        }
+
+        public void setPackageClassName(String packageClassName) {
+            this.packageClassName = packageClassName;
         }
     }
 
@@ -134,17 +160,21 @@ public class AutoCodeConfig {
         if(StringUtils.isBlank(componentName)){
             return null;
         }
+
+//        ("-dao","-daoi","-bean","-s","-si","-c","-a");
+
+
         if("dao".equalsIgnoreCase(componentName)){
             return dao;
-        }else if("daoImpl".equalsIgnoreCase(componentName)){
+        }else if("daoImpl".equalsIgnoreCase(componentName) || "daoi".equalsIgnoreCase(componentName)){
             return daoImpl;
-        }else if("service".equalsIgnoreCase(componentName)){
+        }else if("service".equalsIgnoreCase(componentName) || "s".equalsIgnoreCase(componentName)){
             return service;
-        }else if("serviceImpl".equalsIgnoreCase(componentName)){
+        }else if("serviceImpl".equalsIgnoreCase(componentName) || "si".equalsIgnoreCase(componentName)){
             return serviceImpl;
         }else if("bean".equalsIgnoreCase(componentName)){
             return bean;
-        }else if("controller".equalsIgnoreCase(componentName)){
+        }else if("controller".equalsIgnoreCase(componentName) || "c".equalsIgnoreCase(componentName)){
             return controller;
         }else{
             return null;

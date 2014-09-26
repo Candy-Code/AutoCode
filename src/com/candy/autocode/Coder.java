@@ -2,6 +2,7 @@ package com.candy.autocode;
 
 import com.candy.autocode.config.Config;
 import com.candy.autocode.util.JavaClassNameParser;
+import com.candy.autocode.util.Log;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
@@ -18,6 +19,7 @@ public class Coder {
         init(templateBaseLocation);
     }
     private Configuration cfg;
+    Log log = Log.getLog(Coder.class);
 
     public void init(String templateBaseLocation){
         // 初始化FreeMarker配置
@@ -41,6 +43,8 @@ public class Coder {
 
 
     public void create(Map data, String savePath, String className,String templateName) throws IOException {
+        log.info(String.format("create class %s from template %s,save to %s",className,templateName,savePath));
+//        Log.printMap(data,"");
         Template template = cfg.getTemplate(templateName);
         JavaClassNameParser parser = new JavaClassNameParser(className);
 
@@ -52,13 +56,6 @@ public class Coder {
         }
         PrintWriter out = null;
         try {
-            Map bean2 = new HashMap();
-            bean2.put("className","MyAppImpl");
-            bean2.put("packageName","com.test.candy");
-            bean2.put("author","yantingjun");
-            data.put("bean",bean2);
-//            template.dump(System.out);
-
             out = new PrintWriter(realFileName);
             template.process(data, out);
         } catch (Exception e) {

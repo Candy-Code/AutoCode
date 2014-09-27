@@ -1,29 +1,22 @@
 package com.candy.autocode.config;
 
 import com.candy.autocode.argument.Args;
-import com.candy.autocode.exception.NoComponentException;
 import com.candy.autocode.freemarker.method.TableNameMethod;
 import com.candy.autocode.properties.PropertiesReader;
 import com.candy.autocode.util.R;
 import com.candy.autocode.util.StringUtils;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.InvalidPropertiesFormatException;
-import java.util.Map;
+import java.io.FileNotFoundException;
+import java.security.InvalidParameterException;
+import java.util.*;
 
 /**
+ * 用于存储用户配置的关于自动生成代码的信息
  * Created by yantingjun on 2014/9/21.
  */
 public class AutoCodeConfig {
     private AutoCodeConfig(){}
-
-    private Component controller = new Component();
-    private Component bean = new Component();
-    private Component dao = new Component();
-    private Component daoImpl = new Component();
-    private Component service = new Component();
-    private Component serviceImpl = new Component();
+    private Map<String,Component> components = new HashMap<String,Component>();
     private String templateBaseDir = "";
 
     /**
@@ -40,7 +33,7 @@ public class AutoCodeConfig {
      * @return
      * @throws InvalidPropertiesFormatException
      */
-    public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException {
+    public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException, FileNotFoundException {
         AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
         PropertiesReader propertiesReader = PropertiesReader.getInstance();
         if(StringUtils.isNotBlank(targetName)){
@@ -55,137 +48,77 @@ public class AutoCodeConfig {
         }
         autoCodeConfig.setTemplateBaseDir(StringUtils.valueOf(propertiesReader.getValue("template.basedir")));
 
-
-        loadComponent("bean",autoCodeConfig,propertiesReader);
-        loadComponent("controller",autoCodeConfig,propertiesReader);
-        loadComponent("dao",autoCodeConfig,propertiesReader);
-        loadComponent("daoImpl",autoCodeConfig,propertiesReader);
-        loadComponent("service",autoCodeConfig,propertiesReader);
-        loadComponent("serviceImpl",autoCodeConfig,propertiesReader);
-
         Map variables = propertiesReader.toMap();
+
+        loadComponents(autoCodeConfig,variables);
+
         variables.put("sysdate",new Date());
         variables.put("table",new TableNameMethod());
         autoCodeConfig.setProps(variables);
 
         return autoCodeConfig;
     }
-
-    private static void loadComponent(String componentName,AutoCodeConfig autoCodeConfig,PropertiesReader propertiesReader) throws InvalidPropertiesFormatException {
-        AutoCodeConfig.Component component = autoCodeConfig.getComponent(componentName);
-        if(component == null){
-            throw new NoComponentException(String.format("Component %s not found!",componentName));
+    private static void loadComponents(AutoCodeConfig autoCodeConfig,Map variables) throws InvalidPropertiesFormatException {
+        if(variables == null || variables.get("component") == null){
+            throw new InvalidPropertiesFormatException("Can't find any component!");
         }
-
-        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")))){
-            throw new InvalidPropertiesFormatException(componentName+".savePath is required!");
+        if(!(variables.get("component") instanceof Map)){
+            throw new InvalidPropertiesFormatException("Component config error!");
         }
-        component.setSavePath(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")));
-
-        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")))){
-            throw new InvalidPropertiesFormatException(componentName+".className is required!");
-        }
-        component.setPackageName(StringUtils.valueOf(propertiesReader.getValue(componentName+".packageName")));
-        component.setClassName(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")));
-
-        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")))){
-            component.setTemplate(autoCodeConfig.getTargetName()+ R.template.suffix);
-        }else{
-            component.setTemplate(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")));
+        Map componentMap = (Map)variables.get("component");
+        for(Map.Entry<String,Map> entry : (Set<Map.Entry<String,Map>>)componentMap.entrySet()){
+            if(entry.getValue()!= null &&(entry.getValue() instanceof  Map)){
+                autoCodeConfig.addComponent(entry.getKey(),buildComponent(entry.getKey(),entry.getValue()));
+                //把component加入根结构中，方便模板调用
+                variables.put(entry.getKey(),entry.getValue());
+            }
         }
     }
+    private static Component buildComponent(String componentName,Map componentMap)
+            throws InvalidPropertiesFormatException{
+        if(componentMap == null || componentMap.size() <= 0){
+            throw new InvalidPropertiesFormatException("Component props is empty!");
+        }
+        if(StringUtils.isBlank(componentName)){
+            throw new InvalidPropertiesFormatException("componentName is empty!");
+        }
+        Component component = new Component();
+        if(componentMap.get("className") == null || !(componentMap.get("className") instanceof String)){
+            throw new InvalidPropertiesFormatException("The className of component "+componentName+" is empty!");
+        }
+        component.setClassName(StringUtils.valueOf(componentMap.get("className")));
 
-    public static AutoCodeConfig loadConfig(Args args) throws InvalidPropertiesFormatException {
+        if(componentMap.get("savePath") == null || !(componentMap.get("savePath") instanceof String)){
+            throw new InvalidPropertiesFormatException("The savePath of component "+componentName+" is empty!");
+        }
+        component.setSavePath(StringUtils.valueOf(componentMap.get("savePath")));
+        //报名允许为空
+        component.setPackageName(StringUtils.valueOf(componentMap.get("packageName")));
+
+        //模板为空，则根据组件名称匹配模板
+        if(componentMap.get("template") == null || !(componentMap.get("template") instanceof String)){
+            component.setTemplate(componentName+ R.template.suffix);
+        }else if(StringUtils.valueOf(componentMap.get("template")).endsWith(R.template.suffix)){
+            component.setTemplate(StringUtils.valueOf(componentMap.get("template")));
+        }else{
+            component.setTemplate(componentMap.get("template")+ R.template.suffix);
+        }
+        return component;
+    }
+
+    public static AutoCodeConfig loadConfig(Args args) throws InvalidPropertiesFormatException, FileNotFoundException {
         return loadConfig(args.getTargetName(),args.getConfigFileName());
     }
-    public class Component{
-        private String template;
-        private String className;
-        private String packageName;
-        private String savePath;
 
-        public String getTemplate() {
-            return template;
-        }
-
-        public void setTemplate(String template) {
-            this.template = template;
-        }
-
-        public String getClassName() {
-            return className;
-        }
-
-        public void setClassName(String className) {
-            this.className = className;
-        }
-
-        public String getSavePath() {
-            return savePath;
-        }
-
-        public String getPackageName() {
-            return packageName;
-        }
-
-        public void setPackageName(String packageName) {
-            this.packageName = packageName;
-        }
-
-        public void setSavePath(String savePath) {
-            this.savePath = savePath;
-        }
-
-        public String getPackageClassName() {
-            if(StringUtils.isBlank(className)){
-                return "";
-            }
-            return StringUtils.isBlank(packageName)?className:packageName+"."+className;
-        }
-    }
-
-    public Component getDao() {
-        return dao;
-    }
     public Component getComponent(String componentName){
+        return components.get(componentName);
+    }
+    public Component addComponent(String componentName,Component component){
         if(StringUtils.isBlank(componentName)){
-            return null;
+            throw new InvalidParameterException("componentName is empty");
         }
-        if("dao".equalsIgnoreCase(componentName)){
-            return dao;
-        }else if("daoImpl".equalsIgnoreCase(componentName) || "daoi".equalsIgnoreCase(componentName)){
-            return daoImpl;
-        }else if("service".equalsIgnoreCase(componentName) || "s".equalsIgnoreCase(componentName)){
-            return service;
-        }else if("serviceImpl".equalsIgnoreCase(componentName) || "si".equalsIgnoreCase(componentName)){
-            return serviceImpl;
-        }else if("bean".equalsIgnoreCase(componentName)){
-            return bean;
-        }else if("controller".equalsIgnoreCase(componentName) || "c".equalsIgnoreCase(componentName)){
-            return controller;
-        }else{
-            return null;
-        }
+        return components.put(componentName.toLowerCase(),component);
     }
-
-    public Component getDaoImpl() {
-        return daoImpl;
-    }
-
-    public Component getService() {
-        return service;
-    }
-
-    public Component getServiceImpl() {
-        return serviceImpl;
-    }
-
-
-    public Component getController() {
-        return controller;
-    }
-
-
     public Map getProps() {
         return props;
     }
@@ -202,19 +135,15 @@ public class AutoCodeConfig {
         this.templateBaseDir = templateBaseDir;
     }
 
-    public Component getBean() {
-        return bean;
-    }
-
-    public void setBean(Component bean) {
-        this.bean = bean;
-    }
-
     public String getTargetName() {
         return targetName;
     }
 
     public void setTargetName(String targetName) {
         this.targetName = targetName;
+    }
+
+    public Map<String, Component> getComponents() {
+        return components;
     }
 }

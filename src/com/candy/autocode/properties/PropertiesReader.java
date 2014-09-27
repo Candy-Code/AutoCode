@@ -1,13 +1,11 @@
 package com.candy.autocode.properties;
 
 import com.candy.autocode.exception.InvalidPropertiesKey;
-import com.candy.autocode.util.IOUtils;
-import com.candy.autocode.util.R;
-import com.candy.autocode.util.RegexUtil;
-import com.candy.autocode.util.StringUtils;
+import com.candy.autocode.util.*;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,15 +17,21 @@ public class PropertiesReader {
     private PropertiesReader(){}
     private static PropertiesReader propertiesReader = new PropertiesReader();
 
+    private static Log log = Log.getLog(PropertiesReader.class);
+
     private static OrderedProperties user_properties = new OrderedProperties();
     private static OrderedProperties sys_properties = new OrderedProperties();
     static{
-        propertiesReader.loadProperties(R.Constants.default_system_file_name);
+        try {
+            propertiesReader.loadProperties(R.Constants.default_system_file_name);
+        } catch (FileNotFoundException e) {
+            log.error(e.getMessage());
+        }
     }
     public static PropertiesReader getInstance(){
         return propertiesReader;
     }
-    public void loadProperties(String fileName){
+    public void loadProperties(String fileName) throws FileNotFoundException {
         InputStream in = null;
         try {
             in = PropertiesReader.class.getClassLoader().getResourceAsStream(fileName);
@@ -51,8 +55,11 @@ public class PropertiesReader {
                     user_properties.setProperty(key, value);
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (FileNotFoundException e){
+            throw e;
+        }
+        catch (Exception e) {
+            log.error(e.getMessage());
         }finally {
             IOUtils.close(in);
         }

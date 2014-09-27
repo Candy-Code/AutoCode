@@ -1,12 +1,14 @@
 package com.candy.autocode;
 
 import com.candy.autocode.argument.Args;
-import com.candy.autocode.argument.ArgsParser;
 import com.candy.autocode.config.AutoCodeConfig;
+import com.candy.autocode.config.Component;
+import com.candy.autocode.exception.ComponentNotFoundException;
 import com.candy.autocode.util.StringUtils;
 
 import java.io.IOException;
 import java.security.InvalidParameterException;
+import java.util.Map;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -29,22 +31,35 @@ public class AutoCode {
 
         if("-a".equalsIgnoreCase(args.getOptions())){
             createAll(config);
-        }else if(ArgsParser.options.contains(args.getOptions())){
+        }else {
             createComponent(args.getOptions().substring(1),config);
         }
     }
     private void createComponent(String componentName,AutoCodeConfig config) throws IOException{
-        AutoCodeConfig.Component component = config.getComponent(componentName);
+        Component component = config.getComponent(componentName);
         if(component == null ){
-            return ;
+            throw new ComponentNotFoundException(String.format("Cann't found component :%s!",componentName));
+        }
+        Coder coder = new Coder(config.getTemplateBaseDir());
+        coder.create(config.getProps(),component.getSavePath(),component.getPackageClassName(),component.getTemplate());
+    }
+    private void createComponent(Component component,AutoCodeConfig config) throws IOException{
+        if(component == null ){
+            throw new ComponentNotFoundException(String.format("No such component named %s was found!",component.getClassName()));
         }
         Coder coder = new Coder(config.getTemplateBaseDir());
         coder.create(config.getProps(),component.getSavePath(),component.getPackageClassName(),component.getTemplate());
     }
 
     private void createAll(AutoCodeConfig config) throws IOException {
-        for(String componentName : ArgsParser.options){
-            createComponent(componentName.substring(1),config);
+        if(config == null){
+            throw new RuntimeException("Invalid Param config");
+        }
+        if(config.getComponents() == null ){
+            throw new ComponentNotFoundException("Can't Found any component,please check your configurations!");
+        }
+        for(Map.Entry<String,Component> component : config.getComponents().entrySet()){
+            createComponent(component.getValue(),config);
         }
     }
 }

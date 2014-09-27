@@ -15,23 +15,23 @@ public class Main {
 
     public static void main(String arguments[]){
         try{
+            if(arguments != null && arguments.length > 0 && "--help".equalsIgnoreCase(arguments[0])){
+                log.info(ArgsParser.help);
+                return;
+            }
             Args args = new ArgsParser().parse(arguments);
             printArgs(args);
             AutoCode autoCode = new AutoCode();
             autoCode.run(args);
         }catch(InvalidParameterException e){
-            print("Error:"+e.getMessage());
-            print("-------------------------------help-----------------------------\n"+ArgsParser.help);
+            log.error(e.getMessage());
+            log.error("-------------------------------help-----------------------------\n"+ArgsParser.help);
         }
         catch(Exception e){
-            e.printStackTrace();
-            print(e.getMessage());
+            log.error(e.getMessage());
         }
     }
     private static void printArgs(Args args){
         log.debug(String.format("%s %s %s %s",args.getCommand(),args.getTargetName(),args.getOptions(),args.getConfigFileName()));
-    }
-    private static void print(String str){
-        System.out.println(str);
     }
 }

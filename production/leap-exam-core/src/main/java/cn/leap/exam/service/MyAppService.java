@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 12:23:27 涓浗鏍囧噯鏃堕棿
+ * Time: 2014-09-27 17:31:25 中国标准时间
  */
 public interface MyAppService extends LeapCrudService<MyApp, Long>{
     List<MyApp> findAll();

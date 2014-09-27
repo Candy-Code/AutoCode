@@ -35,14 +35,13 @@ public class Coder {
         try {
             cfg.setDirectoryForTemplateLoading(baseLocation);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
 
     public void create(Map data, String savePath, String className,String templateName) throws IOException {
         log.info(String.format("create class %s from template %s,save to %s",className,templateName,savePath));
-//        Log.printMap(data,"");
         Template template = cfg.getTemplate(templateName);
         JavaClassNameParser parser = new JavaClassNameParser(className);
 
@@ -57,7 +56,7 @@ public class Coder {
             out = new PrintWriter(realFileName);
             template.process(data, out);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }finally {
             if(out != null){
                 out.close();

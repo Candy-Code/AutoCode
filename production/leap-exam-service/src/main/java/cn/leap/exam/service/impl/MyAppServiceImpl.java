@@ -19,7 +19,7 @@ import java.util.Map;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 12:23:27 涓浗鏍囧噯鏃堕棿
+ * Time: 2014-09-27 17:31:39 中国标准时间
  */
 @Service("MyAppService")
 public class MyAppServiceImpl implements MyAppService {

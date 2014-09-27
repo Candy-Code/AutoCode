@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 12:23:27 涓浗鏍囧噯鏃堕棿
+ * Time: 2014-09-27 17:26:48 中国标准时间
  */
 @Document(collection = "my_app")
 public class MyApp implements Serializable {

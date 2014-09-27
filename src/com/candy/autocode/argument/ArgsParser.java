@@ -28,7 +28,7 @@ public class ArgsParser {
             .append("configFileName 配置文件，默认为当前目录下的auto_code.properties\n")
             .toString();
     public static List<String> commands = Arrays.asList("create");
-    public static List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
+//    public static List<String> options = Arrays.asList("-dao","-daoi","-bean","-s","-si","-c","-a");
 
     public Args parse(String [] arguments) throws InvalidParameterException{
         Args args = new Args();
@@ -59,7 +59,7 @@ public class ArgsParser {
         return args;
     }
     private Args parseOptions(String option,Args args){
-        if(options.contains(option.toLowerCase())){
+        if(option.toLowerCase().startsWith("-")){
             args.setOptions(option.toLowerCase());
         }else{
             throw new InvalidParameterException("invalid options!");

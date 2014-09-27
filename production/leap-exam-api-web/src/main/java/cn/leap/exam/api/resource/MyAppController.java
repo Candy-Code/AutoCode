@@ -1,8 +1,8 @@
-锘縫ackage cn.leap.exam.api.resource;
+?package cn.leap.exam.api.resource;
 
 /**
  * User: {yantingjun}
- * Time: 2014-09-27 12:23:27 涓浗鏍囧噯鏃堕棿
+ * Time: 2014-09-27 17:31:53 中国标准时间
  */
 @Path("/myapp")
 public class MyAppController {

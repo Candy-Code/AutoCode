@@ -74,14 +74,4 @@ public class ArgsParser {
         }
         return args;
     }
-
-    public static void main(String[] arguments) {
-        ArgsParser parser = new ArgsParser();
-        Args args = parser.parse(new String[]{"create","myApp","-a","auto_create_myapp.xml"});
-        System.out.println("command:"+args.getCommand());
-        System.out.println("targetName:"+args.getTargetName());
-        System.out.println("options:"+args.getOptions());
-        System.out.println("configFileName:"+args.getConfigFileName());
-    }
-
 }

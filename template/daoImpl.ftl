@@ -8,6 +8,7 @@ package ${daoImpl.packageName};
 @Repository("categoryRepository")
 public class ${daoImpl.className} extends AbstractMongoRepository<${bean.className}>, Long>
         implements ${dao.className} {
+    private static final Logger LOG = LoggerFactory.getLogger(${daoImpl.className}.class);
 
     @Override
     protected Long getId(${bean.className} entity) {

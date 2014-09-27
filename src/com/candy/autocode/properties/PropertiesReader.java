@@ -1,9 +1,16 @@
 package com.candy.autocode.properties;
 
 import com.candy.autocode.exception.InvalidPropertiesKey;
-import com.candy.autocode.util.*;
+import com.candy.autocode.util.IOUtils;
+import com.candy.autocode.util.R;
+import com.candy.autocode.util.RegexUtil;
+import com.candy.autocode.util.StringUtils;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -24,6 +31,9 @@ public class PropertiesReader {
         InputStream in = null;
         try {
             in = PropertiesReader.class.getClassLoader().getResourceAsStream(fileName);
+            if(in == null ){
+                in = new FileInputStream(System.getProperty("user.dir")+ File.separator+fileName);
+            }
             if(in != null){
                 user_properties.load(in);
 
@@ -56,7 +66,7 @@ public class PropertiesReader {
         for(String key : sys_properties.stringPropertyNames()){
             String value = sys_properties.getProperty(key);
             if(key.contains(".")){
-                parseComplexKey(key,root,value);
+                parseComplexKey(key,root,parseValue(value));
             }else{
                 root.put(key, parseValue(value));
             }
@@ -64,7 +74,7 @@ public class PropertiesReader {
         for(String key : user_properties.stringPropertyNames()){
             String value = user_properties.getProperty(key);
             if(key.contains(".")){
-                parseComplexKey(key,root,value);
+                parseComplexKey(key,root,parseValue(value));
             }else{
                 root.put(key, parseValue(value));
             }
@@ -72,30 +82,7 @@ public class PropertiesReader {
         return root;
     }
 
-    public static void main(String[] args) {
-//        Map root = new HashMap();
-//        parseComplexKey("bean.props.name.type",root,"string");
-//        printMap(root,"");
-        Object o = parseValue("[name:string,age:int,sex:int,married:boolean:false]");
-        System.out.println(o instanceof  List);
-        for(Prop prop : (List<Prop>)o){
-            System.out.println(prop.getName());
-            System.out.println(prop.getType());
-            System.out.println(prop.getDefault_value());
-        }
-
-    }
-//    public static void printMap(Map map,String prefix){
-//        for(Map.Entry entry : (Set<Map.Entry>)map.entrySet()){
-//            if(entry.getValue() instanceof  Map){
-//                System.out.println(prefix+"map:"+entry.getKey());
-//                printMap((Map)entry.getValue(),prefix+"--");
-//            }else{
-//                System.out.println(prefix+entry.getKey()+":"+entry.getValue());
-//            }
-//        }
-//    }
-    private static void parseComplexKey(String key,Map node,String value){
+    private static void parseComplexKey(String key,Map node,Object value){
         if(StringUtils.isBlank(key)){
             return;
         }
@@ -118,29 +105,13 @@ public class PropertiesReader {
     }
     private static Object parseValue(String value){
         if(value.startsWith("[")&&value.endsWith("]")){
-            String[] props = value.substring(0,value.length()-1).substring(1).split(",");
-            List valuesList = new ArrayList();
-            for(String propStr : props){
-                String[] vs = propStr.split(":");
-                Prop prop = new Prop();
-                if(vs.length >= 3){
-                    prop.setName(vs[0]);
-                    prop.setType(vs[1]);
-                    prop.setDefault_value(vs[2]);
-                }else if(vs.length == 2){
-                    prop.setName(vs[0]);
-                    prop.setType(vs[1]);
-                }else if(vs.length == 1){
-                    prop.setName(vs[0]);
-                    prop.setType(R.Constants.default_prop_type);
-                }
-                valuesList.add(prop);
-            }
-            return valuesList;
+            return PropParser.parsePropList(value);
         }else{
            return value;
         }
     }
+
+
     public <T> T getValue(String key){
         return (T)user_properties.get(key);
     }

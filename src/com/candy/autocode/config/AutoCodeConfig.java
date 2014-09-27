@@ -2,11 +2,12 @@ package com.candy.autocode.config;
 
 import com.candy.autocode.argument.Args;
 import com.candy.autocode.exception.NoComponentException;
+import com.candy.autocode.freemarker.method.TableNameMethod;
 import com.candy.autocode.properties.PropertiesReader;
 import com.candy.autocode.util.R;
 import com.candy.autocode.util.StringUtils;
 
-import java.io.File;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
@@ -32,18 +33,6 @@ public class AutoCodeConfig {
 
     private Map props = new HashMap();
 
-    public static void main(String[] args) {
-        try {
-            AutoCodeConfig config = AutoCodeConfig.loadConfig("test","auto_code.properties");
-            System.out.println(config.getController().getClassName());
-            System.out.println(config.getBean().getClassName());
-            System.out.println(config.getBean().getSavePath());
-            System.out.println(config.getDao().getClassName());
-            System.out.println(config.getController().getSavePath());
-        } catch (InvalidPropertiesFormatException e) {
-            e.printStackTrace();
-        }
-    }
     /**
      * get a new instance of AutoConfig from the targetName and config file
      * @param targetName
@@ -74,7 +63,11 @@ public class AutoCodeConfig {
         loadComponent("service",autoCodeConfig,propertiesReader);
         loadComponent("serviceImpl",autoCodeConfig,propertiesReader);
 
-        autoCodeConfig.setProps(propertiesReader.toMap());
+        Map variables = propertiesReader.toMap();
+        variables.put("sysdate",new Date());
+        variables.put("table",new TableNameMethod());
+        autoCodeConfig.setProps(variables);
+
         return autoCodeConfig;
     }
 
@@ -87,18 +80,18 @@ public class AutoCodeConfig {
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")))){
             throw new InvalidPropertiesFormatException(componentName+".savePath is required!");
         }
-        autoCodeConfig.getComponent(componentName).setSavePath(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")));
+        component.setSavePath(StringUtils.valueOf(propertiesReader.getValue(componentName+".savePath")));
 
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")))){
             throw new InvalidPropertiesFormatException(componentName+".className is required!");
         }
-        autoCodeConfig.getComponent(componentName).setPackageName(StringUtils.valueOf(propertiesReader.getValue(componentName+".packageName")));
-        autoCodeConfig.getComponent(componentName).setClassName(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")));
+        component.setPackageName(StringUtils.valueOf(propertiesReader.getValue(componentName+".packageName")));
+        component.setClassName(StringUtils.valueOf(propertiesReader.getValue(componentName+".className")));
 
         if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")))){
-            autoCodeConfig.getComponent(componentName).setTemplate(autoCodeConfig.getTargetName()+ R.template.suffix);
+            component.setTemplate(autoCodeConfig.getTargetName()+ R.template.suffix);
         }else{
-            autoCodeConfig.getComponent(componentName).setTemplate(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")));
+            component.setTemplate(StringUtils.valueOf(propertiesReader.getValue(componentName+".template")));
         }
     }
 
@@ -110,7 +103,6 @@ public class AutoCodeConfig {
         private String className;
         private String packageName;
         private String savePath;
-        private String packageClassName;
 
         public String getTemplate() {
             return template;
@@ -145,11 +137,10 @@ public class AutoCodeConfig {
         }
 
         public String getPackageClassName() {
-            return packageClassName;
-        }
-
-        public void setPackageClassName(String packageClassName) {
-            this.packageClassName = packageClassName;
+            if(StringUtils.isBlank(className)){
+                return "";
+            }
+            return StringUtils.isBlank(packageName)?className:packageName+"."+className;
         }
     }
 
@@ -160,10 +151,6 @@ public class AutoCodeConfig {
         if(StringUtils.isBlank(componentName)){
             return null;
         }
-
-//        ("-dao","-daoi","-bean","-s","-si","-c","-a");
-
-
         if("dao".equalsIgnoreCase(componentName)){
             return dao;
         }else if("daoImpl".equalsIgnoreCase(componentName) || "daoi".equalsIgnoreCase(componentName)){

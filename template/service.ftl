@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * User: yantingjun
- * Time: 14-8-8 : 下午1:25
+ * User: ${author}
+ * Time: ${sysdate?string("yyyy-MM-dd HH:mm:ss zzzz")}
  */
 public interface ${service.className} extends LeapCrudService<${bean.className}, Long>{
     List<${bean.className}> findAll();
@@ -17,4 +17,6 @@ public interface ${service.className} extends LeapCrudService<${bean.className},
     ${bean.className} findId(long id);
 
     List<${bean.className}> findByIds(List<Long> ids);
+
+    public List<${bean.className}> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders);
 }

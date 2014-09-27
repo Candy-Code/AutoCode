@@ -15,6 +15,7 @@ public class Main {
 
     public static void main(String arguments[]){
         try{
+            System.out.println(System.getProperty("user.dir"));
             printArgs(arguments);
             Args args = new ArgsParser().parse(arguments);
             AutoCode autoCode = new AutoCode();
@@ -22,7 +23,6 @@ public class Main {
         }catch(InvalidParameterException e){
             print("Error:"+e.getMessage());
             print("-------------------------------help-----------------------------\n"+ArgsParser.help);
-            print(e.getMessage()+"\n"+ArgsParser.help);
         }
         catch(Exception e){
             e.printStackTrace();

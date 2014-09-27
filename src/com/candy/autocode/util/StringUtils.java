@@ -13,4 +13,8 @@ public class StringUtils {
     public static String valueOf(Object value){
         return value==null?"":value.toString();
     }
+
+    public static String around(String value, String aroundStr) {
+        return aroundStr+value+aroundStr;
+    }
 }

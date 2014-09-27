@@ -22,11 +22,4 @@ public class FileUtils {
         }
         return xmlFilename.toLowerCase().matches("[^/\\\\<>\\*\\?\\|\"]+\\.properties");
     }
-    public static void main(String[] args){
-        System.out.println(isInvalidXmlFileName("ss.xx"));
-        System.out.println(isInvalidFileName("ss.xx"));
-        System.out.println(isInvalidXmlFileName("ss.xx"));
-        System.out.println(isInvalidXmlFileName("ss_ss.xml"));
-    }
-
 }

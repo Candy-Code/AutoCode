@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: freemarker-2.3.8.jar
+Main-Class: com.candy.autocode.Main
+

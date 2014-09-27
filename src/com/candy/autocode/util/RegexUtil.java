@@ -41,4 +41,18 @@ public class RegexUtil {
         }
         return src;
     }
+    public static String hump2snake(String source){
+        String regexStr = "[A-Z]";
+        Matcher matcher = Pattern.compile(regexStr).matcher(source);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String g = matcher.group();
+            matcher.appendReplacement(sb, "_" + g.toLowerCase());
+        }
+        matcher.appendTail(sb);
+        if (sb.charAt(0) == '_') {
+            sb.delete(0, 1);
+        }
+        return sb.toString();
+    }
 }

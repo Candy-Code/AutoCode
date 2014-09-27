@@ -9,8 +9,6 @@ import freemarker.template.Template;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Coder {
@@ -66,35 +64,4 @@ public class Coder {
             }
         }
     }
-
-    public static void main(String[] args) throws Exception {
-
-        Coder coder = new Coder("D://template");
-
-        Map root = new HashMap();
-        String Module = "";
-        String model_name = "User";
-        String model_name_list = "Users";
-        String instant = "user";
-        String model_name_cn = "用户";
-        String author = "张何兵";
-        String link = "<a href=http://www.media999.com.cn>北京华亚美科技有限公司</a>";// 模块开发公司网地址
-        Date date = new Date();
-
-        root.put("module", Module);
-        root.put("model_name", model_name);
-        root.put("model_name_list", model_name_list);
-        root.put("instant", instant);
-        root.put("model_name_cn", model_name_cn);
-        root.put("author", author);
-        root.put("link", link);
-        root.put("date", date);
-
-        String savePath = "D://test//src//";
-        String className = "com.media.dao.I" + model_name + "DAO";
-
-
-        coder.create(root, savePath, className, "IDAO.ftl");
-    }
-
 }

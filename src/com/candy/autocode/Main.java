@@ -15,9 +15,8 @@ public class Main {
 
     public static void main(String arguments[]){
         try{
-            System.out.println(System.getProperty("user.dir"));
-            printArgs(arguments);
             Args args = new ArgsParser().parse(arguments);
+            printArgs(args);
             AutoCode autoCode = new AutoCode();
             autoCode.run(args);
         }catch(InvalidParameterException e){
@@ -30,15 +29,7 @@ public class Main {
         }
     }
     private static void printArgs(Args args){
-        log.debug("command:"+args.getCommand());
-        log.debug("targetName:"+args.getTargetName());
-        log.debug(args.getOptions());
-        log.debug(args.getConfigFileName());
-    }
-    private static void printArgs(String[] args){
-        for(String arg : args){
-            log.debug(arg);
-        }
+        log.debug(String.format("%s %s %s %s",args.getCommand(),args.getTargetName(),args.getOptions(),args.getConfigFileName()));
     }
     private static void print(String str){
         System.out.println(str);

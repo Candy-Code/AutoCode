@@ -9,10 +9,10 @@ import java.util.List;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 18:03:23 中国标准时间
+ * Time: 2014-09-27 18:19:42 中国标准时间
  */
-@Document(collection = "my_app")
-public class MyApp implements Serializable {
+@Document(collection = "b")
+public class b implements Serializable {
 
     @Id
     private Long id;

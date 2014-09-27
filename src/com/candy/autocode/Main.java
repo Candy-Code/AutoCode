@@ -28,10 +28,11 @@ public class Main {
             log.error("-------------------------------help-----------------------------\n"+ArgsParser.help);
         }
         catch(Exception e){
+            e.printStackTrace();
             log.error(e.getMessage());
         }
     }
     private static void printArgs(Args args){
-        log.debug(String.format("%s %s %s %s",args.getCommand(),args.getTargetName(),args.getOptions(),args.getConfigFileName()));
+        log.debug(String.format("%s %s %s %s", args.getCommand(), args.getTargetName(), args.getOptions(), args.getConfigFileName()));
     }
 }

@@ -1,7 +1,7 @@
 package cn.leap.exam.service.impl;
 
-import cn.leap.exam.model.MyApp;
-import cn.leap.exam.repository.impl.MyAppRepository;
+import cn.leap.exam.model.a;
+import cn.leap.exam.repository.impl.aRepository;
 import cn.leap.utils.bean.BeanToMapUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -19,46 +19,46 @@ import java.util.Map;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 18:03:23 中国标准时间
+ * Time: 2014-09-27 18:13:31 中国标准时间
  */
-@Service("MyAppService")
-public class MyAppServiceImpl implements MyAppService {
-    private static final Logger LOG = LoggerFactory.getLogger(MyAppServiceImpl.class);
+@Service("aService")
+public class aServiceImpl implements aService {
+    private static final Logger LOG = LoggerFactory.getLogger(aServiceImpl.class);
     @Resource
-    private MyAppRepository myAppRepository;
+    private aRepository aRepository;
 
     @Override
-    public List<MyApp> findAll() {
-        return myAppRepository.findAll();
+    public List<a> findAll() {
+        return aRepository.findAll();
     }
 
     @Override
-    public MyApp findId(long id) {
-        return myAppRepository.findOne(id);
+    public a findId(long id) {
+        return aRepository.findOne(id);
     }
 
     @Override
-    public List<MyApp> findByIds(List<Long> ids) {
+    public List<a> findByIds(List<Long> ids) {
         Query query = new Query().addCriteria(new Criteria("id").in(ids));
-        return myAppRepository.findByQuery(query);
+        return aRepository.findByQuery(query);
     }
 
     @Override
-    public boolean save(MyApp entity) {
-        return myAppRepository.save(entity);
+    public boolean save(a entity) {
+        return aRepository.save(entity);
     }
 
     @Override
-    public MyApp findOne(Long id) {
-        return myAppRepository.findOne(id);
+    public a findOne(Long id) {
+        return aRepository.findOne(id);
     }
 
     @Override
     public boolean delete(Long id) {
-        return myAppRepository.delete(id);
+        return aRepository.delete(id);
     }
     @Override
-    public List<MyApp> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders){
+    public List<a> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders){
         Query query = new Query();
         for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>)params.entrySet()){
             query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
@@ -71,6 +71,6 @@ public class MyAppServiceImpl implements MyAppService {
             }
         }
         query.skip(begin).limit(num);
-        return myAppRepository.findByQuery(query);
+        return aRepository.findByQuery(query);
     }
 }

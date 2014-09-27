@@ -1,12 +1,15 @@
 package com.candy.autocode.argument;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by yantingjun on 2014/9/21.
  */
 public class Args {
     private String command = "";
     private String targetName = "";
-    private String options = "-a";
+    private List<String> options = new ArrayList();
     private String configFileName = "auto_code.properties";
 
     public String getConfigFileName() {
@@ -17,11 +20,11 @@ public class Args {
         this.configFileName = configFileName;
     }
 
-    public String getOptions() {
+    public List<String> getOptions() {
         return options;
     }
 
-    public void setOptions(String options) {
+    public void setOptions(List<String> options) {
         this.options = options;
     }
 

@@ -3,7 +3,7 @@ package cn.leap.exam.repository.impl;
 
 /**
  * User: yantingjun
- * Time: 14-8-8 : œ¬ŒÁ1:29
+ * Time: 14-8-8 : ‰∏ãÂçà1:29
  */
 @Repository("categoryRepository")
 public class MyAppRepositoryImpl extends AbstractMongoRepository<MyApp>, Long>

@@ -1,7 +1,7 @@
 package cn.leap.exam.service.impl;
 
-import cn.leap.exam.model.MyApp;
-import cn.leap.exam.repository.impl.MyAppRepository;
+import cn.leap.exam.model.#{args.targetName};
+import cn.leap.exam.repository.impl.#{args.targetName}Repository;
 import cn.leap.utils.bean.BeanToMapUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -19,46 +19,46 @@ import java.util.Map;
 
 /**
  * User: yantingjun
- * Time: 2014-09-27 18:03:23 中国标准时间
+ * Time: 2014-09-27 18:13:58 中国标准时间
  */
-@Service("MyAppService")
-public class MyAppServiceImpl implements MyAppService {
-    private static final Logger LOG = LoggerFactory.getLogger(MyAppServiceImpl.class);
+@Service("#{args.targetName}Service")
+public class #{args.targetName}ServiceImpl implements #{args.targetName}Service {
+    private static final Logger LOG = LoggerFactory.getLogger(#{args.targetName}ServiceImpl.class);
     @Resource
-    private MyAppRepository myAppRepository;
+    private #{args.targetName}Repository #{args.targetName}Repository;
 
     @Override
-    public List<MyApp> findAll() {
-        return myAppRepository.findAll();
+    public List<#{args.targetName}> findAll() {
+        return #{args.targetName}Repository.findAll();
     }
 
     @Override
-    public MyApp findId(long id) {
-        return myAppRepository.findOne(id);
+    public #{args.targetName} findId(long id) {
+        return #{args.targetName}Repository.findOne(id);
     }
 
     @Override
-    public List<MyApp> findByIds(List<Long> ids) {
+    public List<#{args.targetName}> findByIds(List<Long> ids) {
         Query query = new Query().addCriteria(new Criteria("id").in(ids));
-        return myAppRepository.findByQuery(query);
+        return #{args.targetName}Repository.findByQuery(query);
     }
 
     @Override
-    public boolean save(MyApp entity) {
-        return myAppRepository.save(entity);
+    public boolean save(#{args.targetName} entity) {
+        return #{args.targetName}Repository.save(entity);
     }
 
     @Override
-    public MyApp findOne(Long id) {
-        return myAppRepository.findOne(id);
+    public #{args.targetName} findOne(Long id) {
+        return #{args.targetName}Repository.findOne(id);
     }
 
     @Override
     public boolean delete(Long id) {
-        return myAppRepository.delete(id);
+        return #{args.targetName}Repository.delete(id);
     }
     @Override
-    public List<MyApp> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders){
+    public List<#{args.targetName}> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders){
         Query query = new Query();
         for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>)params.entrySet()){
             query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
@@ -71,6 +71,6 @@ public class MyAppServiceImpl implements MyAppService {
             }
         }
         query.skip(begin).limit(num);
-        return myAppRepository.findByQuery(query);
+        return #{args.targetName}Repository.findByQuery(query);
     }
 }

@@ -29,10 +29,16 @@ public class AutoCode {
         //根据autoCodeConfig中的配置，调用coder生成代码
         AutoCodeConfig config = AutoCodeConfig.loadConfig(args);
 
-        if("-a".equalsIgnoreCase(args.getOptions())){
+        if(args.getOptions() == null || args.getOptions().size() <= 0){
+            throw new RuntimeException("options is empty");
+        }
+
+        if(args.getOptions().contains("a")){
             createAll(config);
         }else {
-            createComponent(args.getOptions().substring(1),config);
+            for(String option : args.getOptions()){
+                createComponent(option,config);
+            }
         }
     }
     private void createComponent(String componentName,AutoCodeConfig config) throws IOException{

@@ -1,8 +1,6 @@
 package com.candy.autocode.util;
 
 import java.security.InvalidParameterException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -26,7 +24,7 @@ public class JavaClassNameParser {
         if(StringUtils.isBlank(className)){
             return false;
         }
-        return className.matches("^[^\\d][0-9a-zA-Z_$]+$");
+        return className.matches("^[^\\d]+[0-9a-zA-Z_$]?$");
     }
 
 

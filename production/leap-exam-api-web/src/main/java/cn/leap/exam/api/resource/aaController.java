@@ -1,15 +1,15 @@
-锘縫ackage cn.leap.exam.api.resource;
+?package cn.leap.exam.api.resource;
 
 /**
  * User: {yantingjun}
- * Time: 2014-09-27 18:03:23 涓浗鏍囧噯鏃堕棿
+ * Time: 2014-09-27 18:09:04 中国标准时间
  */
-@Path("/myapp")
-public class MyAppController {
+@Path("/aa")
+public class aaController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MyAppController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(aaController.class);
 
-    private MyAppService myAppService;
+    private aaService aaService;
 
     @GET
     public Response get(@QueryParam Long id){
@@ -17,7 +17,7 @@ public class MyAppController {
             Preconditions.checkArguments(id!=null,"Miss Param:id");
             Map params = new HashMap();
             params.put("id",id);
-            return myAppService.queryByParams(params);
+            return aaService.queryByParams(params);
         }catch(IllegalArgumentsException e){
             ResponseCreater.OK(LeapStatus.PARAM_INVALID,e.getMessage());
         }
@@ -32,7 +32,7 @@ public class MyAppController {
             Preconditions.checkArguments(id!=null,"Miss Param:id");
             Map params = new HashMap();
             params.put("id",id);
-            return myAppService.queryByParams(params);
+            return aaService.queryByParams(params);
         }catch(IllegalArgumentsException e){
             ResponseCreater.OK(LeapStatus.PARAM_INVALID,e.getMessage());
         }
@@ -47,15 +47,15 @@ public class MyAppController {
             Preconditions.checkArguments(id!=null,"Miss Param:id");
             Map params = new HashMap();
             params.put("id",id);
-            List<MyApp> resultsList =  myAppService.queryByParams(params);
+            List<aa> resultsList =  aaService.queryByParams(params);
             if(resultsList == null || resultsList.size() <= 0){
                 return ResponseCreater.OK(LeapStatus.RESOURCE_NOT_EXISTS,e.getMessage());
             }
 
-            MyApp myApp = new MyApp();
+            aa aa = new aa();
             //set column values here
 
-            if(myAppService.save()){
+            if(aaService.save()){
                 return ResponseCreater.OK(LeapStatus.SUCCESS);
             }else{
                 return ResponseCreater.OK(LeapStatus.SERVER_EXCEPTION);
@@ -74,12 +74,12 @@ public class MyAppController {
             Preconditions.checkArguments(id!=null,"Miss Param:id");
             Map params = new HashMap();
             params.put("id",id);
-            List<MyApp> resultsList =  myAppService.queryByParams(params);
+            List<aa> resultsList =  aaService.queryByParams(params);
             if(resultsList == null || resultsList.size() <= 0){
                 return ResponseCreater.OK(LeapStatus.RESOURCE_NOT_EXISTS,e.getMessage());
             }
 
-            if(myAppService.deleteById(id)){
+            if(aaService.deleteById(id)){
                 return ResponseCreater.OK(LeapStatus.SUCCESS);
             }else{
                 return ResponseCreater.OK(LeapStatus.SERVER_EXCEPTION);
@@ -97,10 +97,10 @@ public class MyAppController {
             //check arguments here
             //Preconditions.checkArguments(id!=null,"Miss Param:id");
 
-            MyApp myApp = new MyApp();
+            aa aa = new aa();
             //set column values here
 
-            if(myAppService.save()){
+            if(aaService.save()){
                 return ResponseCreater.OK(LeapStatus.SUCCESS);
             }else{
                 return ResponseCreater.OK(LeapStatus.SERVER_EXCEPTION);

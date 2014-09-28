@@ -2,6 +2,7 @@ package ${serviceImpl.packageName};
 
 import ${bean.packageName}.${bean.className};
 import ${dao.packageName}.${dao.className};
+import ${service.packageName}.${service.className};
 import cn.leap.utils.bean.BeanToMapUtil;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
@@ -9,18 +10,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
- * User: ${author}
- * Time: ${sysdate?string("yyyy-MM-dd HH:mm:ss zzzz")}
- */
+* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+*/
 @Service("${bean.className}Service")
 public class ${serviceImpl.className} implements ${service.className} {
     private static final Logger LOG = LoggerFactory.getLogger(${serviceImpl.className}.class);
@@ -60,17 +58,51 @@ public class ${serviceImpl.className} implements ${service.className} {
     @Override
     public List<${bean.className}> queryByParams(Map<String,Object> params,int begin,int num,Map<String,String> orders){
         Query query = new Query();
-        for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>)params.entrySet()){
+        for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>>)params.entrySet()){
             query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
         }
-        for(Map.Entry<String,String> entry: (Set<Map.Entry<String,String>)params.entrySet()){
+        for(Map.Entry<String,String> entry: (Set<Map.Entry<String,String>>)orders.entrySet()){
             if("desc".equalsIgnoreCase(entry.getValue())){
-                query.sort().on(entry.getKey(),Order.DESCING);
+                query.sort().on(entry.getKey(),Order.DESCENDING);
             }else if("asc".equalsIgnoreCase(entry.getValue())){
-                query.sort().on(entry.getKey(),Order.ASCING);
+                query.sort().on(entry.getKey(),Order.ASCENDING);
             }
         }
         query.skip(begin).limit(num);
+        return ${dao.className?uncap_first}.findByQuery(query);
+    }
+    @Override
+    public List<${bean.className}> queryByParams(Map<String, Object> params, int begin, int num) {
+        Query query = new Query();
+        for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>>)params.entrySet()){
+            query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
+        }
+        query.skip(begin).limit(num);
+        return ${dao.className?uncap_first}.findByQuery(query);
+    }
+
+    @Override
+    public List<${bean.className}> queryByParams(Map<String, Object> params) {
+        Query query = new Query();
+        for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>>)params.entrySet()){
+            query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
+        }
+        return ${dao.className?uncap_first}.findByQuery(query);
+    }
+
+    @Override
+    public List<${bean.className}> queryByParams(Map<String, Object> params, Map<String, String> orders) {
+        Query query = new Query();
+        for(Map.Entry<String,Object> entry: (Set<Map.Entry<String,Object>>)params.entrySet()){
+            query.addCriteria(new Criteria(entry.getKey()).is(entry.getValue()));
+        }
+        for(Map.Entry<String,String> entry: (Set<Map.Entry<String,String>>)orders.entrySet()){
+        if("desc".equalsIgnoreCase(entry.getValue())){
+            query.sort().on(entry.getKey(),Order.DESCENDING);
+        }else if("asc".equalsIgnoreCase(entry.getValue())){
+            query.sort().on(entry.getKey(),Order.ASCENDING);
+        }
+        }
         return ${dao.className?uncap_first}.findByQuery(query);
     }
 }

@@ -1,4 +1,4 @@
-package ${component.bean.packageName};
+package ${bean.packageName};
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,10 +8,9 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * User: ${author}
- * Time: ${sysdate?string("yyyy-MM-dd HH:mm:ss zzzz")}
- */
-@Document(collection = "${table(bean.className)}")
+* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+*/
+@Document(collection = "${table(bean.className)}s")
 public class ${bean.className} implements Serializable {
 
     @Id

@@ -11,13 +11,13 @@ public class Log {
         return new Log();
     }
     public void debug(String msg){
-        System.out.println(msg);
+        System.out.println("[Debug] "+msg);
     }
     public void error(String msg){
-        System.err.println(msg);
+        System.err.println("[Error] "+msg);
     }
     public void info(String msg){
-        System.out.println(msg);
+        System.out.println("[Info] "+msg);
     }
 
 
@@ -30,5 +30,10 @@ public class Log {
                 System.out.println(prefix+entry.getKey()+":"+entry.getValue());
             }
         }
+    }
+
+    public void error(Exception e) {
+        error(e.getMessage());
+        e.printStackTrace();
     }
 }

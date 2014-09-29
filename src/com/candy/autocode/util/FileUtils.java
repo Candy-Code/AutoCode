@@ -4,6 +4,14 @@ package com.candy.autocode.util;
  * Created by yantingjun on 2014/9/21.
  */
 public class FileUtils {
+
+    public static boolean isInvalidFileBaseName(String filename){
+        if(StringUtils.isBlank(filename)){
+            return false;
+        }
+        return filename.matches("[^/\\\\<>\\*\\?\\|\"]+");
+    }
+
     public static boolean isInvalidFileName(String filename){
         if(StringUtils.isBlank(filename)){
             return false;

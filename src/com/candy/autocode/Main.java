@@ -5,6 +5,7 @@ import com.candy.autocode.argument.ArgsParser;
 import com.candy.autocode.util.Log;
 
 import java.security.InvalidParameterException;
+import java.util.Map;
 
 /**
  * Created by yantingjun on 2014/9/21.
@@ -24,12 +25,11 @@ public class Main {
             AutoCode autoCode = new AutoCode();
             autoCode.run(args);
         }catch(InvalidParameterException e){
-            log.error(e.getMessage());
+            log.error(e);
             log.error("-------------------------------help-----------------------------\n"+ArgsParser.help);
         }
         catch(Exception e){
-            e.printStackTrace();
-            log.error(e.getMessage());
+            log.error(e);
         }
     }
     private static void printArgs(Args args){

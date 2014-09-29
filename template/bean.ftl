@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
-* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+* @author ${user.name} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
 @Document(collection = "${hump2snake(bean.className)}s")
 public class ${bean.className} implements Serializable {

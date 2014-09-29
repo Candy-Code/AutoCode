@@ -14,7 +14,7 @@ public class IOUtils {
             try {
                 closeable.close();
             } catch (IOException e) {
-                log.error(e.getMessage());
+                log.error(e);
             }
         }
     }

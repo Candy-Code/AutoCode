@@ -1,4 +1,4 @@
-package ${controller.packageName};
+﻿package ${controller.packageName};
 
 
 import ${bean.packageName}.${bean.className};
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+ * @author ${user.name} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
  */
 @Path("/${bean.className?lower_case}")
 public class ${controller.className} {

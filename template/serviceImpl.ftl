@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
-* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+* @author ${user.name} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
 @Service("${service.className?uncap_first}")
 public class ${serviceImpl.className} implements ${service.className} {

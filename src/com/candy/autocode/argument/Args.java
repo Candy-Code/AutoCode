@@ -10,6 +10,7 @@ public class Args {
     private String command = "";
     private String targetName = "";
     private List<String> options = new ArrayList();
+    private String templateGroup = "default";
     private String configFileName = "auto_code.properties";
 
     public String getConfigFileName() {
@@ -42,5 +43,13 @@ public class Args {
 
     public void setCommand(String command) {
         this.command = command;
+    }
+
+    public String getTemplateGroup() {
+        return templateGroup;
+    }
+
+    public void setTemplateGroup(String templateGroup) {
+        this.templateGroup = templateGroup;
     }
 }

@@ -41,7 +41,7 @@ public class Config {
         try {
             propertiesReader.loadProperties(R.Constants.default_system_file_name);
         } catch (FileNotFoundException e) {
-            log.error(e.getMessage());
+            log.error(e);
         }
         encoding = propertiesReader.getValue("encoding",R.Constants.DEFAULT_ENCODING);
         locale = propertiesReader.getValue("locale",R.Constants.DEFAULT_LOCALE);

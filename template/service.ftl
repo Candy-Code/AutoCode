@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
-* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+* @author ${user.name} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
 public interface ${service.className} extends LeapCrudService<${bean.className}, Long>{
     List<${bean.className}> findAll();

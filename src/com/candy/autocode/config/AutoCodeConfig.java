@@ -33,31 +33,9 @@ public class AutoCodeConfig {
      * @return
      * @throws InvalidPropertiesFormatException
      */
-    public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException, FileNotFoundException {
-        AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
-        PropertiesReader propertiesReader = PropertiesReader.getInstance();
-        if(StringUtils.isNotBlank(targetName)){
-            autoCodeConfig.setTargetName(targetName);
-            propertiesReader.setSystemValue("args.targetName",targetName);
-        }
-
-        propertiesReader.loadProperties(configFileName);
-
-        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue("template.basedir")))){
-            throw new InvalidPropertiesFormatException("template.dir is required!");
-        }
-        autoCodeConfig.setTemplateBaseDir(StringUtils.valueOf(propertiesReader.getValue("template.basedir")));
-
-        Map variables = propertiesReader.toMap();
-
-        loadComponents(autoCodeConfig,variables);
-
-        variables.put("sysdate",new Date());
-        variables.put("hump2snake",new Hump2snakeMethod());
-        autoCodeConfig.setProps(variables);
-
-        return autoCodeConfig;
-    }
+//    public static AutoCodeConfig loadConfig(String targetName,String configFileName) throws InvalidPropertiesFormatException, FileNotFoundException {
+//
+//    }
     private static void loadComponents(AutoCodeConfig autoCodeConfig,Map variables) throws InvalidPropertiesFormatException {
         if(variables == null || variables.get("component") == null){
             throw new InvalidPropertiesFormatException("Can't find any component!");
@@ -107,7 +85,31 @@ public class AutoCodeConfig {
     }
 
     public static AutoCodeConfig loadConfig(Args args) throws InvalidPropertiesFormatException, FileNotFoundException {
-        return loadConfig(args.getTargetName(),args.getConfigFileName());
+        AutoCodeConfig autoCodeConfig = new AutoCodeConfig();
+        PropertiesReader propertiesReader = PropertiesReader.getInstance();
+
+        autoCodeConfig.setTargetName(args.getTargetName());
+        propertiesReader.setValue("args.targetName",args.getTargetName());
+        propertiesReader.setValue("args.templateGroup",args.getTemplateGroup());
+        propertiesReader.setValue("args.command",args.getCommand());
+        propertiesReader.setValue("args.options",args.getOptions().toString());
+
+        propertiesReader.loadProperties(args.getConfigFileName());
+
+        if(StringUtils.isBlank(StringUtils.valueOf(propertiesReader.getValue("template.basedir")))){
+            throw new InvalidPropertiesFormatException("template.dir is required!");
+        }
+        autoCodeConfig.setTemplateBaseDir(StringUtils.valueOf(propertiesReader.getValue("template.basedir")));
+
+        Map variables = propertiesReader.toMap();
+
+        loadComponents(autoCodeConfig,variables);
+
+        variables.put("sysdate",new Date());
+        variables.put("hump2snake",new Hump2snakeMethod());
+        autoCodeConfig.setProps(variables);
+
+        return autoCodeConfig;
     }
 
     public Component getComponent(String componentName){

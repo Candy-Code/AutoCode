@@ -15,7 +15,7 @@ import cn.leap.id.api.IdType;
 import cn.leap.utils.LeapDateUtils;
 
 /**
-* @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
+* @author ${user.name} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
 @Repository("${dao.className?uncap_first}")
 public class ${daoImpl.className} extends AbstractMongoRepository<${bean.className}, Long>

@@ -16,11 +16,12 @@ public class ArgsParser {
     public static String help = new StringBuilder()
             .append("autocode <command> targetName [options] [configFileName]\n")
             .append("command:  \n")
-            .append("   create  创建组件\n")
-            .append("   del(ete)     删除组件\n")
-            .append("targetName:  目标名称,由字母、数字、下划线、$组成，且不能以数字开头 \n")
+            .append("   create      创建组件\n")
+            .append("   del(ete)    删除组件\n")
+            .append("targetName:    目标名称,由字母、数字、下划线、$组成，且不能以数字开头 \n")
             .append("options:  \n")
-            .append("   -c1,c2  指定要创建的组件的名称,多个组件之间以逗号分隔 \n")
+            .append("   -c1,c2      指定要创建的组件的名称,多个组件之间以逗号分隔 \n")
+            .append("templateGroup  模板组，默认为default\n")
             .append("configFileName 配置文件，默认为当前目录下的auto_code.properties\n")
             .toString();
     public static List<String> commands = Arrays.asList("create","del","delete");
@@ -47,14 +48,23 @@ public class ArgsParser {
             if(arguments[2].startsWith("-")){
                 parseOptions(arguments[2].substring(1),args);
             }else{
-                parseConfigFileName(arguments[2],args);
+                parseTemplateGroup(arguments[2],args);
             }
         }
         if(arguments.length >= 4){
-            parseOptions(arguments[2],args);
+            parseTemplateGroup(arguments[3],args);
+        }
+        if(arguments.length >= 5){
             parseConfigFileName(arguments[3],args);
         }
 
+        return args;
+    }
+
+    private Args parseTemplateGroup(String argument,Args args){
+        if(FileUtils.isInvalidFileBaseName(argument)){
+            args.setTemplateGroup(argument);
+        }
         return args;
     }
     private Args parseOptions(String option,Args args){

@@ -1,6 +1,7 @@
 package com.candy.autocode;
 
 import com.candy.autocode.config.Config;
+import com.candy.autocode.exception.TemplateException;
 import com.candy.autocode.util.JavaClassNameParser;
 import com.candy.autocode.util.Log;
 import freemarker.template.Configuration;
@@ -30,12 +31,13 @@ public class Coder {
         // 设置FreeMarker的模版文件位置
         File baseLocation = new File(templateBaseLocation);
         if(!baseLocation.exists()){
-            baseLocation.mkdirs();
+            throw new TemplateException(String.format("Template group was found in directory %s",baseLocation.getParent()));
         }
+        log.info("template base location : "+ templateBaseLocation);
         try {
             cfg.setDirectoryForTemplateLoading(baseLocation);
         } catch (IOException e) {
-            log.error(e.getMessage());
+            log.error(e);
         }
     }
 
@@ -56,7 +58,7 @@ public class Coder {
             out = new PrintWriter(realFileName);
             template.process(data, out);
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error(e);
         }finally {
             if(out != null){
                 out.close();

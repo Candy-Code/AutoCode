@@ -10,7 +10,7 @@ import java.util.List;
 /**
 * @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
-@Document(collection = "${table(bean.className)}s")
+@Document(collection = "${hump2snake(bean.className)}s")
 public class ${bean.className} implements Serializable {
 
     @Id

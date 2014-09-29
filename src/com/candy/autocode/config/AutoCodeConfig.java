@@ -1,7 +1,7 @@
 package com.candy.autocode.config;
 
 import com.candy.autocode.argument.Args;
-import com.candy.autocode.freemarker.method.TableNameMethod;
+import com.candy.autocode.freemarker.method.Hump2snakeMethod;
 import com.candy.autocode.properties.PropertiesReader;
 import com.candy.autocode.util.R;
 import com.candy.autocode.util.StringUtils;
@@ -53,7 +53,7 @@ public class AutoCodeConfig {
         loadComponents(autoCodeConfig,variables);
 
         variables.put("sysdate",new Date());
-        variables.put("table",new TableNameMethod());
+        variables.put("hump2snake",new Hump2snakeMethod());
         autoCodeConfig.setProps(variables);
 
         return autoCodeConfig;

@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by ytj on 2014/9/27.
  */
-public class TableNameMethod implements TemplateMethodModel {
+public class Hump2snakeMethod implements TemplateMethodModel {
     @Override
     public Object exec(List params) throws TemplateModelException {
         if(params == null || params.size() < 1){

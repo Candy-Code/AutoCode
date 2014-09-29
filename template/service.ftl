@@ -24,4 +24,6 @@ public interface ${service.className} extends LeapCrudService<${bean.className},
     public List<${bean.className}> queryByParams(Map<String,Object> params);
 
     public List<${bean.className}> queryByParams(Map<String,Object> params,Map<String,String> orders);
+
+    public long countByParams(Map<String, Object> params);
 }

@@ -21,7 +21,7 @@ import java.util.Map;
 /**
  * @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
  */
-@Path("/${bean.className}")
+@Path("/${bean.className?lower_case}")
 public class ${controller.className} {
 
     private static final Logger LOG = LoggerFactory.getLogger(${controller.className}.class);

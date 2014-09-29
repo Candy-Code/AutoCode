@@ -19,7 +19,7 @@ import java.util.*;
 /**
 * @author ${author} created at ${sysdate?string("yyyy-MM-dd HH:mm:ss")}
 */
-@Service("${bean.className}Service")
+@Service("${service.className?uncap_first}")
 public class ${serviceImpl.className} implements ${service.className} {
     private static final Logger LOG = LoggerFactory.getLogger(${serviceImpl.className}.class);
     @Resource
@@ -104,5 +104,10 @@ public class ${serviceImpl.className} implements ${service.className} {
         }
         }
         return ${dao.className?uncap_first}.findByQuery(query);
+    }
+
+    @Override
+    public long countByParams(Map<String, Object> params) {
+        return this.${dao.className?uncap_first}.countByCondition(params);
     }
 }

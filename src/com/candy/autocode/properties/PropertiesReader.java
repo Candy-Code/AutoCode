@@ -1,5 +1,6 @@
 package com.candy.autocode.properties;
 
+import com.candy.autocode.config.Context;
 import com.candy.autocode.exception.InvalidPropertiesKey;
 import com.candy.autocode.util.*;
 
@@ -9,27 +10,30 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by yantingjun on 2014/9/21.
  */
 public class PropertiesReader {
-    private PropertiesReader(){}
-    private static PropertiesReader propertiesReader = new PropertiesReader();
-
-    private static Log log = Log.getLog(PropertiesReader.class);
-
-    private static OrderedProperties properties = new OrderedProperties();
-//    private static OrderedProperties sys_properties = new OrderedProperties();
-    static{
+    private PropertiesReader(Context context){
+        this.context = context;
         try {
             loadSystemProperties();
-            propertiesReader.loadProperties(R.Constants.default_system_file_name);
+            loadProperties(R.Constants.default_system_file_name);
         } catch (FileNotFoundException e) {
             log.error(e);
         }
     }
-    private static void loadSystemProperties(){
+    private static PropertiesReader propertiesReader = null;
+    private static Context context;
+    private static Log log = Log.getLog(PropertiesReader.class);
+
+    private static OrderedProperties properties = new OrderedProperties();
+
+    private void loadSystemProperties(){
         properties.put("user.dir", System.getProperty("user.dir"));
         properties.put("user.country", System.getProperty("user.country"));
         properties.put("user.home", System.getProperty("user.home"));
@@ -40,6 +44,9 @@ public class PropertiesReader {
         properties.put("file.separator", System.getProperty("file.separator"));
     }
     public static PropertiesReader getInstance(){
+        if(propertiesReader == null){
+            propertiesReader = new PropertiesReader(Context.getInstance());
+        }
         return propertiesReader;
     }
     public void loadProperties(String fileName) throws FileNotFoundException {
@@ -61,7 +68,7 @@ public class PropertiesReader {
                     value = (String) properties.get(key);
                     if(StringUtils.isNotBlank(value)){
 //                        value = RegexUtil.replayWithSysProps(value, sys_properties);
-                        value = RegexUtil.replayWithUsrProps(value, properties);
+                        value = replaceWithUsrProps(value, properties);
                     }
                     properties.setProperty(key, value);
                 }
@@ -75,7 +82,25 @@ public class PropertiesReader {
             IOUtils.close(in);
         }
     }
+    public static String replaceWithUsrProps(String src,Properties props){
+        Pattern pattern = Pattern.compile("\\$\\{([^\\?}]+)(\\?([^}\\?]+))?\\}");
+        Matcher matcher=pattern.matcher(src);
+        while(matcher.find()){
+            String key = matcher.group(1);
+            String methodName = matcher.group(3);
 
+            if(props.containsKey(key)){
+                if(StringUtils.isNotBlank(methodName)){
+                    MethodHandler handler = new MethodHandler(context);
+                    src = src.replaceAll("\\$\\{"+key+"\\?"+methodName+"\\}",handler.executeMethod(methodName,props.getProperty(key,"undefined")));
+                }else{
+                    src = src.replaceAll("\\$\\{"+key+"\\}",props.getProperty(key,"undefined"));
+                }
+
+            }
+        }
+        return src;
+    }
     public static PropertiesReader getProperties(){
         return propertiesReader;
     }
@@ -144,18 +169,12 @@ public class PropertiesReader {
     public void setValue(String key,Object value){
         properties.put(key,value);
     }
-//    public <T> T getSystemValue(String key){
-//        return (T) properties.get(key);
-//    }
-//    public void setSystemValue(String key,String value){
-//        sys_properties.setProperty(key,value);
-//    }
-//    public <T> T getSystemValue(String key,T default_value){
-//        try{
-//            Object o = properties.get(key);
-//            return o == null?default_value:(T)o;
-//        }catch(Exception e){
-//            return default_value;
-//        }
-//    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
 }

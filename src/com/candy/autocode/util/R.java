@@ -14,4 +14,7 @@ public class R {
     public static class template{
         public static final String suffix = ".ftl";
     }
+    public static class regex{
+        public static final String method = "$([^\\(]+)\\([^\\)+]\\)";
+    }
 }

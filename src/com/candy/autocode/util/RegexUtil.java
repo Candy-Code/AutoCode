@@ -1,5 +1,7 @@
 package com.candy.autocode.util;
 
+import com.candy.autocode.properties.MethodHandler;
+
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,29 +20,12 @@ public class RegexUtil {
         }
         return null;
     }
+    public static boolean find(String src,String regex){
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher=pattern.matcher(src);
+        return matcher.find();
+    }
 
-    public static String replayWithSysProps(String src,Properties props){
-        Pattern pattern = Pattern.compile("#\\{([^}]+)\\}");
-        Matcher matcher=pattern.matcher(src);
-        while(matcher.find()){
-            String key = matcher.group(1);
-            if(props.containsKey(key)){
-                src = src.replaceAll("#\\{"+key+"\\}",props.getProperty(key,"undefined"));
-            }
-        }
-        return src;
-    }
-    public static String replayWithUsrProps(String src,Properties props){
-        Pattern pattern = Pattern.compile("\\$\\{([^}]+)\\}");
-        Matcher matcher=pattern.matcher(src);
-        while(matcher.find()){
-            String key = matcher.group(1);
-            if(props.containsKey(key)){
-                src = src.replaceAll("\\$\\{"+key+"\\}",props.getProperty(key,"undefined"));
-            }
-        }
-        return src;
-    }
     public static String hump2snake(String source){
         String regexStr = "[A-Z]";
         Matcher matcher = Pattern.compile(regexStr).matcher(source);

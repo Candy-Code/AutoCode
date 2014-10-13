@@ -28,8 +28,8 @@ public class AutoCodeConfig {
 
     /**
      * get a new instance of AutoConfig from the targetName and config file
-     * @param targetName
-     * @param configFileName
+     * @param autoCodeConfig
+     * @param variables
      * @return
      * @throws InvalidPropertiesFormatException
      */
@@ -102,15 +102,20 @@ public class AutoCodeConfig {
         autoCodeConfig.setTemplateBaseDir(StringUtils.valueOf(propertiesReader.getValue("template.basedir")));
 
         Map variables = propertiesReader.toMap();
-
         loadComponents(autoCodeConfig,variables);
+        loadExtraVariables(variables);
+        loadExtraMethod(variables);
 
-        variables.put("sysdate",new Date());
-        variables.put("hump2snake",new Hump2snakeMethod());
         autoCodeConfig.setProps(variables);
-
         return autoCodeConfig;
     }
+    private static void loadExtraVariables(Map variables){
+        variables.put("sysdate",new Date());
+    }
+    private static void loadExtraMethod(Map variables){
+        variables.put("hump2snake",new Hump2snakeMethod());
+    }
+
 
     public Component getComponent(String componentName){
         return components.get(componentName);

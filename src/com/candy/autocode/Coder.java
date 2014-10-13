@@ -31,7 +31,7 @@ public class Coder {
         // 设置FreeMarker的模版文件位置
         File baseLocation = new File(templateBaseLocation);
         if(!baseLocation.exists()){
-            throw new TemplateException(String.format("Template group was found in directory %s",baseLocation.getParent()));
+            throw new TemplateException(String.format("Template group was found in directory %s",baseLocation.getAbsolutePath()));
         }
         log.info("template base location : "+ templateBaseLocation);
         try {

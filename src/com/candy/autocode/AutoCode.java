@@ -65,7 +65,7 @@ public class AutoCode {
         File file = new File(component.getSavePath() + File.separator+parser.getPackagePath() + parser.getJavaFileName());
         if(file.exists()){
             if(file.delete()){
-                log.error("Successfully delete file "+file.getAbsolutePath()+"!");
+                log.info("Successfully delete file "+file.getAbsolutePath()+"!");
             }else{
                 log.error("Failed to  delete file "+file.getAbsolutePath()+"!");
             }

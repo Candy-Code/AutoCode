@@ -55,7 +55,7 @@ public class ArgsParser {
             parseTemplateGroup(arguments[3],args);
         }
         if(arguments.length >= 5){
-            parseConfigFileName(arguments[3],args);
+            parseConfigFileName(arguments[4],args);
         }
 
         return args;

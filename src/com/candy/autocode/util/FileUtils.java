@@ -30,4 +30,8 @@ public class FileUtils {
         }
         return xmlFilename.toLowerCase().matches("[^/\\\\<>\\*\\?\\|\"]+\\.properties");
     }
+
+    public static void main(String[] args) {
+        System.out.println(FileUtils.isInvalidPropertiesFileName("note.properties"));
+    }
 }

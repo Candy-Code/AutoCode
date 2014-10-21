@@ -15,6 +15,7 @@ $RECYCLE.BIN/
 *.msp
 .m2
 .idea
+jar/
 .git
 target/*
 out

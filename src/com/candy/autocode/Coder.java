@@ -10,6 +10,8 @@ import freemarker.template.Template;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.charset.Charset;
+import java.util.Locale;
 import java.util.Map;
 
 public class Coder {
@@ -25,8 +27,10 @@ public class Coder {
         // 创建一个Configuration实例
         cfg = new Configuration();
         cfg.setDefaultEncoding(Config.getEncoding());
-
-//        cfg.setLocale(Locale.forLanguageTag(Config.getLocale()));
+        log.debug("encoding:" + Config.getEncoding());
+        log.debug("locale:"+Config.getLocale());
+        cfg.setEncoding(Locale.forLanguageTag(Config.getLocale()),Config.getEncoding());
+        cfg.setOutputEncoding(Config.getEncoding());
 
         // 设置FreeMarker的模版文件位置
         File baseLocation = new File(templateBaseLocation);
@@ -55,7 +59,7 @@ public class Coder {
         }
         PrintWriter out = null;
         try {
-            out = new PrintWriter(realFileName);
+            out = new PrintWriter(realFileName,Config.getEncoding());
             template.process(data, out);
         } catch (Exception e) {
             log.error(e);
